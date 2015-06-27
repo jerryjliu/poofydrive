@@ -9,3 +9,6 @@ autopublish
 insecure
 percolate:google-api
 iron:router
+fortawesome:fontawesome
+less
+nemo64:bootstrap
