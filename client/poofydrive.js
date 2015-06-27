@@ -14,4 +14,16 @@ if (Meteor.isClient) {
       Session.set('counter', Session.get('counter') + 1);
     }
   });
+
+  Template.productList.helpers({
+    products: [
+      {title: "Happy face", description: "I am a happy face"},
+      {title: "Happy face", description: "I am a happy face"},
+      {title: "Happy face", description: "I am a happy face"},
+      {title: "Happy face", description: "I am a happy face"},
+      {title: "Happy face", description: "I am a happy face"},
+      {title: "Happy face", description: "I am a happy face"},
+    ]
+  })
+
 }
