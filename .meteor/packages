@@ -9,3 +9,10 @@ autopublish
 insecure
 percolate:google-api
 iron:router
+cfs:standard-packages
+cfs:gridfs
+cfs:filesystem
+meteorhacks:npm
+
+
+npm-container
