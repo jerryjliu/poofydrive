@@ -1,0 +1,33 @@
+<head>
+  <title>poofydrive</title>
+</head>
+
+<body>
+  <h1>Welcome to Meteor!</h1>
+  {{> hello}}
+  {{> productList }}
+</body>
+
+<template name="home">
+  Hi
+</template>
+
+<template name="hello">
+  <button>Click Me</button>
+  <p>You've pressed the button {{counter}} times.</p>
+</template>
+
+<template name="productList">
+  <div class="row">
+    {{#each products}}
+    <div class="col-lg-4">
+      {{>productListItem}}
+    </div>
+    {{/each}}
+  </div>
+</template>
+
+<template name="productListItem">
+  <h4>{{title}}</h4>
+  <p>{{description}}</p>
+</template>
