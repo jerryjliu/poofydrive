@@ -1,0 +1,16 @@
+<template name="fileList">
+  <div class="row">
+    {{#each files }}
+    <div class="col-lg-4">
+      {{>fileItem}}
+    </div>
+    {{/each}}
+  </div>
+</template>
+
+<template name="fileItem">
+  <div class="fileItem">
+    <i class="fa fa-caret-down"></i>
+    <span>{{title}}</span>
+  </div>
+</template>
