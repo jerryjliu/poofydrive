@@ -1,1 +1,1 @@
-Router.route('/productList')
+Router.route('/fileList')
