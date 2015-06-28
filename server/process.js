@@ -75,7 +75,7 @@ if (Meteor.isServer) {
 		//should return all chunks
 		processFile: processFile,
 		// should have uploaded file
-		uploadFile: function(filename, dir, parent, dropboxToken) {
+		uploadFile: function(filename, dir, parent, fileId, dropboxToken) {
 			//get information about all providers
 			var user = Users.find({user_id: this.userId}).fetch();
 			//var providersArray = user[kUsersSP];
@@ -113,7 +113,13 @@ if (Meteor.isServer) {
 			fsinsert[kFilesChunks] = [];
 
 			//console.log("before for loop: " + providersArray.length);
-
+      
+      console.log("Before");
+      console.log(FileCollection.find().fetch());
+      FileCollection.remove({_id: fileId});
+      console.log("After");
+      console.log(FileCollection.find().fetch());
+      
 			//upload these chunks to the storage providers - identified using providersArray
 			//also insert entries into FSChunkEntries
 			for (var i in providersArray) {
@@ -124,13 +130,14 @@ if (Meteor.isServer) {
 				console.log("outside if loop");
 				//dropbox
 				if (providerId == StorageProvider_Dropbox) {
-					var url_string = "https://api-content.dropbox.com/1/files_put/auto/" + path + "?"; 
+					var url_string = "https://api-content.dropbox.com/1/files_put/auto/" + path; 
 					var fs = Npm.require("fs");
 					var chunkContents = fs.readFileSync(chunk);
-					var newChunk = chunkContents.toString('utf8');
-					console.log("pre chunk");
-					// set value of token
-					var account_info = HTTP.call("PUT", url_string, {data: [newChunk]}, {headers: {'Authorization': 'Bearer ' + dropboxToken, 'Content-Type': 'text/html'}});		
+					//var newChunk = chunkContents.toString('utf8');
+					var newChunk = chunkContents.toString("binary");
+					console.log("pre chunk: ", dropboxToken);
+					// set value of access_tokenn
+					var account_info = HTTP.call("POST", url_string, {params: { overwrite: "true" }, content: newChunk, headers: {'Authorization': 'Bearer ' + dropboxToken}});		
 					console.log("successful?");
 					console.log(account_info);
 
