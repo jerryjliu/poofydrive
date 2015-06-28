@@ -1,6 +1,8 @@
 <template name="actionsBar">
-  <a id="plus"><i class="fa fa-2x fa-plus"></i></a>
-  <a id="upload"><i class="fa fa-2x fa-upload"></i>{{>uploadForm}}</a>
+  <a id="add" href="#"><i class="fa fa-2x fa-plus"></i></a>
+  <div id="newDirForm">{{> newDirForm}}</div>
+  <a id="upload" href="#"><i class="fa fa-2x fa-upload"></i></a>
+  <div id="uploadForm">{{ > uploadForm }}</div>
   <a id="download"><i class="fa fa-2x fa-download"></i></a>
   <a id="trash"><i class="fa fa-2x fa-trash"></i></a>
   {{ > uploadForm }}
