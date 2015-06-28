@@ -52,7 +52,7 @@ if (Meteor.isServer) {
 			return returnArray;
 		},
 		// should have uploaded file
-		uploadFile: function(filename, dir) {
+		uploadFile: function(filename, dir, parent) {
 			//get information about all providers
 			var user = Users.find({user_id: this.userId}).fetch();
 			var providersArray = user[kUsersSP];
@@ -60,7 +60,7 @@ if (Meteor.isServer) {
 			for (var i in providersArray) {
 				var provider = providersArray[i];
 				var capacity = provider[kUsersSPCapacity];
-				capacityArray.push(capacity);
+				capacityArray.push(capacity);	
 			}
 
 			outputChunks = processFile(filename, dir, capacityArray);
