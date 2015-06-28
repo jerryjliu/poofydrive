@@ -7,4 +7,10 @@ Template.actionsBar.events({
        else
           e.style.display = 'block';
     }
+  "click #download": function () {
+    console.log("clicked download")
+  }
+  "click #trash": function() {
+    console.log("clicked trash")
+  }
 });
