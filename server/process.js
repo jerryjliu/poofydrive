@@ -100,7 +100,7 @@ if (Meteor.isServer) {
 			//build file entry to Files
 			fsinsert = {};
 			fsinsert[kFilesUserID] = user[kUsersUserID];
-			fsinsert[kFilesParent] = dir;
+			fsinsert[kFilesParent] = parent;
 			fsinsert[kFilesName] = filename;
 			fsinsert[kFilesIsDir] = 0;
 			fsinsert[kFilesChunks] = [];
