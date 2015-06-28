@@ -1,37 +1,24 @@
 <template name='loggedIn'>
-  <h1>PoofyDrive</h1>
-  <div>
-    {{> header}}
-  </div>
-  <div>
-    <div class=".col-md-8">
-      {{> left}}
+  <div class="container-fluid">
+    <h1>PoofyDrive</h1>
+    <div>
+      {{> header}}
     </div>
-    <div id="right" class=".col-md-4">
-      {{> right}}
+    <div class="row">
+      <div id="left" class="col-md-9">
+        {{> left}}
+      </div>
+      <div id="right" class="col-md-3">
+        {{> right}}
+      </div>
     </div>
-  </div>
-  <div>
-    {{> footer}}
+    <div>
+      {{> footer}}
+    </div>
   </div>
 </template>
 
 <template name='header'>
-</template>
-
-<template name='left'>
-  {{> searchBar }}
-  {{> directoryMap }}
-  {{> fileList}}
-</template>
-
-<template name='searchBar'>
-</template>
-
-<template name='directoryMap'>
-</template>
-
-<template name='fileList'>
 </template>
 
 <template name='footer'>
