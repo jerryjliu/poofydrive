@@ -28,3 +28,11 @@
 <template name='footer'>
 </template>
 
+<template name="layout">
+  <div id="main" class="row-fluid">
+    {{> yield}}
+  </div>
+</template>
+<template name="notFound">
+  <h1> YOU ARE IN THE WRONG PLACE </h1>
+</template>

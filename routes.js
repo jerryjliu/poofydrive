@@ -1,4 +1,5 @@
 Router.route('/fileList')
-Router.route('/', function(){
-    this.render('logged-in');
-});
+Router.route('/', {name: 'logged-in'});
+Router.configure({
+  layoutTemplate: 'layout',
+})
