@@ -1,11 +1,11 @@
 <template name="navBar">
   <div class="col-md-6">
-    <p>Hi {{ name }}!</p>
+    {{> directoryMap}}
   </div>
   <div class="col-md-4">
     {{> searchBar}}
   </div>
-  <div class="col-md-2">
+  <div id="actionsBar" class="col-md-2">
     {{> actionsBar}}
   </div>
 </template>
