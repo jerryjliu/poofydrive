@@ -11,9 +11,9 @@
 <template name="fileItem">
   <div class="fileItem">
     {{#if kFilesIsDir}}
-      <i class="fa fa-folder-o"></i>
+    <i class="fa fa-folder-o" data-filename="{{kFilesName}}"></i>
     {{else }}
-      <i class="fa fa-file-o"></i>
+    <i class="fa fa-file-o" data-filename="{{kFilesName}}"></i>
     {{/if}}
     <span>{{kFilesName}}</span>
   </div>

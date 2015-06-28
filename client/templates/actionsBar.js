@@ -35,5 +35,13 @@ Template.actionsBar.events({
   },
   "click #trash": function() {
     console.log("clicked trash")
+  },
+});
+
+Template.newDirForm.events({
+  "click #newdirSubmit": function(e) {
+    val = $(".newdir-form input").val();
+    dir_map = Session.get("cwd");
+      Files.insert({"kFilesUserID": Session.get("uid"), "kFilesParent": dir_map, "kFilesName": val, "kFilesIsDir": 1});
   }
 });
