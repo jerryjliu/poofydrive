@@ -1,5 +1,5 @@
 FileCollection = new FS.Collection("fileCollection", {
-  stores: [new FS.Store.FileSystem("fileCollection", {path: "~/meteor_uploads"})]
+  stores: [new FS.Store.FileSystem("fileCollection")]
 });
 FileCollection.allow({
   insert: function (userId, doc) {

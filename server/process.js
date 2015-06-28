@@ -7,7 +7,7 @@ if (Meteor.isServer) {
     return FileCollection.find();
   });
 
-  function processFile(filename, dir, capacityArray) {
+  function processFile(filename, dir, capacityArray, fileId) {
 		console.log("chunking file");
 		var total = 0;
 		for (var i in capacityArray) {
@@ -30,10 +30,19 @@ if (Meteor.isServer) {
 				fs.unlinkSync(outputFile);
 			}
 			catch(err) {
-
+        FileCollection.remove({_id: fileId});
 			}
 		}
-		var fileContents = fs.readFileSync(dir + filename);
+		var fileContents;
+    try {
+      fileContents = fs.readFileSync(dir + filename);
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+      }
+    }
+    if (!fileContents) {
+      return null;
+    }
 		if (fileContents.length == 0) {
 			return null;
 		}
@@ -102,7 +111,10 @@ if (Meteor.isServer) {
       console.log(dir);
       console.log("HEYYY");
 
-			outputChunks = processFile(filename, dir, capacityArray);
+			outputChunks = processFile(filename, dir, capacityArray, fileId);
+      if (!outputChunks) {
+        return null;
+      }
 
 			//build file entry to Files
 			fsinsert = {};

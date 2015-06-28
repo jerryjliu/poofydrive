@@ -2,12 +2,8 @@ Router.route('/fileList')
 Router.configure({
   layoutTemplate: 'layout',
 })
-Router.route('/loggedIn')
 Router.route('/right')
-
-Router.route('/', function(){
-    this.render('logged-in');
-});
+Router.route('/', {name: "loggedIn"}); 
 
 Router.route('/dropboxauth', function() {
 	var code = this.params.query.code;
