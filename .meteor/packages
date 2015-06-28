@@ -9,3 +9,8 @@ autopublish
 insecure
 percolate:google-api
 iron:router
+http
+google
+accounts-google
+accounts-ui
+service-configuration
