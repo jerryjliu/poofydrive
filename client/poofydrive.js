@@ -1,6 +1,7 @@
 if (Meteor.isClient) {
   // counter starts at 0
   Session.setDefault('counter', 0);
+  Session.setDefault('dir_map', "Home")
 
   // Template.hello.helpers({
   //   counter: function () {
