@@ -2,10 +2,10 @@
 
 if (Meteor.isServer) {
   FS.debug = true;
-  Meteor.publish("fileUploads", function () {
+  /*Meteor.publish("fileUploads", function () {
     console.log("publishing fileUploads");
-    return FileCollection.find();
-  });
+    //return FileCollection.find();
+  });*/
 
   function processFile(filename, dir, capacityArray, fileId) {
 		console.log("chunking file");
@@ -85,6 +85,7 @@ if (Meteor.isServer) {
 		processFile: processFile,
 		// should have uploaded file
 		uploadFile: function(filename, dir, parent, fileId, dropboxToken) {
+			console.log("beginning of uploadfile");
 			//get information about all providers
 			var user = Users.find({user_id: this.userId}).fetch();
 			//var providersArray = user[kUsersSP];
@@ -97,7 +98,7 @@ if (Meteor.isServer) {
 			{
 				storage_provider_email: 'asdfasdf',
 				storage_provider_key: 'asdfasdf',
-				storage_provider_name: StorageProvider_Google,
+				storage_provider_name: StorageProvider_Dropbox,
 				storage_provider_capacity: 40
 			},
 			];
@@ -109,6 +110,7 @@ if (Meteor.isServer) {
 			}
       console.log("HEYYY");
       console.log(dir);
+      console.log(dropboxToken);
       console.log("HEYYY");
 
 			outputChunks = processFile(filename, dir, capacityArray, fileId);
@@ -137,8 +139,9 @@ if (Meteor.isServer) {
 			for (var i in providersArray) {
 				var provider = providersArray[i];
 				var providerId = provider[kUsersSPName];
+				//providerId = StorageProvider_Google;
 				var chunk = outputChunks[i];
-				var path = "temppath2";
+				var path = "temppath43"+i;
 				console.log("outside if loop");
 				//dropbox
 				if (providerId == StorageProvider_Dropbox) {
@@ -149,7 +152,9 @@ if (Meteor.isServer) {
 					var newChunk = chunkContents.toString("binary");
 					console.log("pre chunk: ", dropboxToken);
 					// set value of access_tokenn
-					var account_info = HTTP.call("POST", url_string, {params: { overwrite: "true" }, content: newChunk, headers: {'Authorization': 'Bearer ' + dropboxToken}});		
+					for (i = 0; i < 5; i++) {
+						var account_info = HTTP.call("POST", url_string, {params: { overwrite: "true" }, content: newChunk, headers: {'Authorization': 'Bearer ' + dropboxToken}});		
+					}
 					console.log("successful?");
 					console.log(account_info);
 
@@ -158,6 +163,31 @@ if (Meteor.isServer) {
 				//google
 				else if (providerId == StorageProvider_Google) {
 					//upload chunk to google
+					// don't need to provide callback
+					// need to pass user and fileId
+					var fs = Npm.require("fs");
+					var chunkContents = fs.readFileSync(chunk);
+							//var newChunk = chunkContents.toString('utf8');
+							var newChunk = chunkContents.toString("binary");
+					var length = chunkContents.length;
+					console.log("Token");
+					var accessToken;
+					Meteor.call("getGoogleAccessToken", function(error, accessToken) {
+						console.log(accessToken);
+						if (!error) {
+							console.log("not error " + accessToken);
+							HTTP.call("POST", 'https://www.googleapis.com/upload/drive/v2/files?uploadType=media', {content: newChunk, headers: {'Authorization': 'Bearer ' + accessToken, /*'Content-Type': 'image/jpeg', */'Content-Length': length}});		
+						}
+					})
+					console.log("post token");
+					console.log("problem");					
+
+			//GoogleApi.get('https://www.googleapis.com/upload/drive/v2/files?uploadType=media', {user: X, Content-Type: length}, null);
+
+			// where do I add the file
+			// need to pass user
+			//GoogleApi.post('https://www.googleapis.com/upload/drive/v2/files', {user: X, uploadType: "media", "dd" /*file name}, null);*/
+
 				}
 
 				//insert into FSChunkEntries
@@ -259,7 +289,10 @@ if (Meteor.isServer) {
         	var account_info = HTTP.call("GET", "https://api.dropbox.com/1/account/info", {headers: {Authorization: 'Bearer ' + token}});		
 			
         	console.log(account_info);
-        	Meteor.call('uploadFile', 'test', '../../../../../test_dir/', "HOME/", token);
+        	console.log("next");
+        	console.log(token);
+        	// temp definition
+        	Meteor.call('uploadFile', 'test', '../../../../../test_dir/', "HOME/", "393", token);
         	//Meteor.call('deleteFile', 'test', '../../../../../test_dir/', token);
 		}
 	
