@@ -1,15 +1,4 @@
-Template.actionsBar.events({
-  /*"click #upload": function () {
-       var e = document.getElementById("uploadForm");
-       console.log(e);
-       if(e.style.display == 'block')
-          e.style.display = 'none';
-       else
-          e.style.display = 'block';
-    },
-  "click #upload": function () {
-    $( "#upload" ).accordion();
-  },*/
+Template.loggedIn.events({
   "click .accordion-section-title": function(e) {
       // Grab current anchor value
       var currentAttrValue = $(this).attr('href');
@@ -28,12 +17,5 @@ Template.actionsBar.events({
       }
 
       e.preventDefault();
-  },
-
-  "click #download": function () {
-    console.log("clicked download")
-  },
-  "click #trash": function() {
-    console.log("clicked trash")
   }
 });
