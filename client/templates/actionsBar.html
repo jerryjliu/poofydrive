@@ -1,17 +1,8 @@
 <template name="actionsBar">
-  <a class="add"><i class="fa fa-2x fa-plus"></i>{{>newDirForm}}</a>
-  <a class="upload"><i class="fa fa-2x fa-upload"></i>{{>uploadForm}}</a>
+  <a id="add" href="#"><i class="fa fa-2x fa-plus"></i></a>
+  <div id="newDirForm">{{> newDirForm}}</div>
+  <a id="upload" href="#"><i class="fa fa-2x fa-upload"></i></a>
+  <div id="uploadForm">{{ > uploadForm }}</div>
   <a id="download"><i class="fa fa-2x fa-download"></i></a>
   <a id="trash"><i class="fa fa-2x fa-trash"></i></a>
-</template>
-
-
-
-<template name="newDirForm">
-  <form class="navbar-form navbar-left" role="search">
-    <div class="form-group">
-      <input type="text" class="form-control" placeholder="New Directory Name">
-      <button type="submit" class="btn btn-default">Submit</button>
-    </div>
-  </form>
 </template>
