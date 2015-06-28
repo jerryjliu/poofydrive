@@ -14,7 +14,8 @@ if (Meteor.isClient) {
       target = target.children[0];
       filename = $(target).data("filename");
       if ($(target).hasClass("fa-folder-o")) {
-        Session.set("dir_map", "Home > " + filename);
+        Session.set("dir_map", Session.get("dir_map") + " > " + filename);
+        console.log("cwd is " + filename);
         Session.set("cwd", filename);
       }
     }
