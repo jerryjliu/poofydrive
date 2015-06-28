@@ -113,7 +113,12 @@ if (Meteor.isServer) {
 			fsinsert[kFilesChunks] = [];
 
 			//console.log("before for loop: " + providersArray.length);
+      
+      console.log("Before");
+      console.log(FileCollection.find().fetch());
       FileCollection.remove({_id: fileId});
+      console.log("After");
+      console.log(FileCollection.find().fetch());
       
 			//upload these chunks to the storage providers - identified using providersArray
 			//also insert entries into FSChunkEntries
