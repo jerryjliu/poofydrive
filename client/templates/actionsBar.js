@@ -12,8 +12,9 @@ Template.uploadForm.events({
       var fileObj = new FS.File(file);
       console.log(fileObj);
       console.log(Files);
-      Files.insert(fileObj);
-      console.log(fileObj.url);
+      Files.insert(fileObj, function(err, file) {
+        console.log(fileObj.url({brokenIsFine: true}));
+      });
     });
   }
 });
