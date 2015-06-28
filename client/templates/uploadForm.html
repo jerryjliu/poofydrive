@@ -1,7 +1,9 @@
 <template name="uploadForm">
   <div id="uploadForm" class="row">
     <form>
-      <input class="fileInput" type="file" multiple>
+      <input class="your-upload-class" type="file">
+      {{#each theFiles}}
+      {{/each}}
       <input type="submit">
     </form>
   </div>

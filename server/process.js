@@ -2,76 +2,117 @@
 
 if (Meteor.isServer) {
   FS.debug = true;
+  Meteor.publish("fileUploads", function () {
+    console.log("publishing fileUploads");
+    return FileCollection.find();
+  });
+
+  function processFile(filename, dir, capacityArray) {
+		console.log("chunking file");
+		var total = 0;
+		for (var i in capacityArray) {
+			total += capacityArray[i];
+		}
+		for (var i in capacityArray) {
+			capacityArray[i] /= total;
+		}
+		for (var i in capacityArray) {
+			if (i > 0) {
+				capacityArray[i] += capacityArray[i-1];
+			}
+		}
+
+		var fs = Npm.require("fs");
+		// delete existing temp files
+		for (var i in capacityArray) {
+			var outputFile = dir + filename + "_part_" + i;
+			try {
+				fs.unlinkSync(outputFile);
+			}
+			catch(err) {
+
+			}
+		}
+		var fileContents = fs.readFileSync(dir + filename);
+		if (fileContents.length == 0) {
+			return null;
+		}
+
+		var a = 0;
+		var returnArray = [];
+		fs.writeFileSync(dir + filename + "_TESTING", fileContents);
+		var prev = 0;
+		for (var i in capacityArray) {
+			var newlength = Math.floor(fileContents.length * capacityArray[i]);
+			var bufslice = fileContents.slice(prev, newlength);
+			var outputFile = dir + filename + "_part_" + i;
+			fs.writeFileSync(outputFile, bufslice);
+			returnArray.push(outputFile);
+			prev = newlength;
+		}
+		return returnArray;
+	}
+
+	function unprocessFile(filename, dir, numParts) {
+		console.log("unchunking file");
+		var fs = Npm.require("fs");
+		var outputFile = dir + filename;
+		try {
+			fs.unlinkSync(outputFile);
+		}
+		catch(e) {
+		}
+		for (var i = 0; i < numParts; i++) {
+			var outputFilePart = dir + filename + "_part_" + i;
+			var fileContents = fs.readFileSync(outputFilePart);
+			fs.appendFileSync(outputFile, fileContents);
+			fs.unlinkSync(outputFilePart);
+		}
+	}
 
 	Meteor.methods({
 
 		//should return all chunks
-		processFile: function(filename, dir, capacityArray) {
-			console.log("chunking file");
-			var total = 0;
-			for (var i in capacityArray) {
-				total += capacityArray[i];
-			}
-			for (var i in capacityArray) {
-				capacityArray[i] /= total;
-			}
-			for (var i in capacityArray) {
-				if (i > 0) {
-					capacityArray[i] += capacityArray[i-1];
-				}
-			}
-
-			var fs = Npm.require("fs");
-			// delete existing temp files
-			for (var i in capacityArray) {
-				var outputFile = dir + filename + "_part_" + i;
-				try {
-					fs.unlinkSync(outputFile);
-				}
-				catch(err) {
-
-				}
-			}
-			var fileContents = fs.readFileSync(dir + filename);
-			if (fileContents.length == 0) {
-				return null;
-			}
-
-			var a = 0;
-			var returnArray = [];
-			fs.writeFileSync(dir + filename + "_TESTING", fileContents);
-			var prev = 0;
-			for (var i in capacityArray) {
-				var newlength = Math.floor(fileContents.length * capacityArray[i]);
-				var bufslice = fileContents.slice(prev, newlength);
-				var outputFile = dir + filename + "_part_" + i;
-				fs.writeFileSync(outputFile, bufslice);
-				returnArray.push(outputFile);
-				prev = newlength;
-			}
-			return returnArray;
-		},
+		processFile: processFile,
 		// should have uploaded file
-		uploadFile: function(filename, dir) {
+		uploadFile: function(filename, dir, parent, dropboxToken) {
 			//get information about all providers
 			var user = Users.find({user_id: this.userId}).fetch();
-			var providersArray = user[kUsersSP];
+			//var providersArray = user[kUsersSP];
+			providersArray = [{
+				storage_provider_email: 'asdfasdf',
+				storage_provider_key: 'asdfasdf',
+				storage_provider_name: StorageProvider_Dropbox,
+				storage_provider_capacity: 60
+			},
+			{
+				storage_provider_email: 'asdfasdf',
+				storage_provider_key: 'asdfasdf',
+				storage_provider_name: StorageProvider_Google,
+				storage_provider_capacity: 40
+			},
+			];
 			var capacityArray = [];
 			for (var i in providersArray) {
 				var provider = providersArray[i];
 				var capacity = provider[kUsersSPCapacity];
-				capacityArray.push(capacity);
+				capacityArray.push(capacity);	
 			}
+      console.log("HEYYY");
+      console.log(dir);
+      console.log("HEYYY");
 
 			outputChunks = processFile(filename, dir, capacityArray);
 
 			//build file entry to Files
 			fsinsert = {};
 			fsinsert[kFilesUserID] = user[kUsersUserID];
-			fsinsert[kFilesParent] = dir;
+			fsinsert[kFilesParent] = parent;
 			fsinsert[kFilesName] = filename;
 			fsinsert[kFilesIsDir] = 0;
 			fsinsert[kFilesChunks] = [];
+
+			//console.log("before for loop: " + providersArray.length);
 
 			//upload these chunks to the storage providers - identified using providersArray
 			//also insert entries into FSChunkEntries
@@ -79,8 +120,20 @@ if (Meteor.isServer) {
 				var provider = providersArray[i];
 				var providerId = provider[kUsersSPName];
 				var chunk = outputChunks[i];
+				var path = "temppath2";
+				console.log("outside if loop");
 				//dropbox
 				if (providerId == StorageProvider_Dropbox) {
+					var url_string = "https://api-content.dropbox.com/1/files_put/auto/" + path + "?"; 
+					var fs = Npm.require("fs");
+					var chunkContents = fs.readFileSync(chunk);
+					var newChunk = chunkContents.toString('utf8');
+					console.log("pre chunk");
+					// set value of token
+					var account_info = HTTP.call("PUT", url_string, {data: [newChunk]}, {headers: {'Authorization': 'Bearer ' + dropboxToken, 'Content-Type': 'text/html'}});		
+					console.log("successful?");
+					console.log(account_info);
+
 					//upload chunk to dropbox
 				}
 				//google
@@ -97,6 +150,9 @@ if (Meteor.isServer) {
 			var fid = Files.insert(fsinsert);
 
 			//append fid to user
+			if (user[kUsersFiles] == null) {
+				user[kUsersFiles] = [];
+			}
 			var file_ids = user[kUsersFiles];
 			file_ids.push(fid);
 			Users.update({user_id: this.userId},
@@ -105,22 +161,7 @@ if (Meteor.isServer) {
 			});
 		},
 
-		unprocessFile: function(filename, dir, numParts) {
-			console.log("unchunking file");
-			var fs = Npm.require("fs");
-			var outputFile = dir + filename;
-			try {
-				fs.unlinkSync(outputFile);
-			}
-			catch(e) {
-			}
-			for (var i = 0; i < numParts; i++) {
-				var outputFilePart = dir + filename + "_part_" + i;
-				var fileContents = fs.readFileSync(outputFilePart);
-				fs.appendFileSync(outputFile, fileContents);
-				fs.unlinkSync(outputFilePart);
-			}
-		},
+		unprocessFile: unprocessFile,
 		downloadFile: function(filename, dir) {
 			// get information about file in database (where is it stored?)
 			var file = Files.findOne({uid: this.userId, name: filename});
@@ -141,18 +182,22 @@ if (Meteor.isServer) {
 			}
 			unprocessFile(filename, dir, chunks.length);
 		},
-		deleteFile: function(filename, dir) {
+		deleteFile: function(filename, dir, dropboxToken) {
 			var user = Users.findOne({user_id: this.userId});
 			var file = Files.findOne({uid: this.userId, name: filename});
 			var fid = file["_id"];
 			var chunks = file[kFilesChunks];
 			//identify each of these chunks and download from providers
+			console.log("delte before for");
 			for (var i in chunks) {
 				var chunk = chunks[i];
 				var storage_provider = chunk[kFilesChunksStorageProvider];
 				var seqnum = chunk[kFilesChunksSeqnum];
 				if (storage_provider == StorageProvider_Dropbox) {
-					//delete from dropbox
+					console.log("delete before http");
+					var url_string = "https://api-content.dropbox.com/1/fileops/delete"; 
+					var account_info = HTTP.call("POST", url_string, {params: {root: "", path: "temppath"}}, {headers: {'Authorization': 'Bearer ' + dropboxToken, 'Content-Type': 'text/html'}});		
+					console.log("delete after http");
 
 				}
 				else if (storage_provider == StorageProvider_Google) {
@@ -195,6 +240,8 @@ if (Meteor.isServer) {
         	var account_info = HTTP.call("GET", "https://api.dropbox.com/1/account/info", {headers: {Authorization: 'Bearer ' + token}});		
 			
         	console.log(account_info);
+        	Meteor.call('uploadFile', 'test', '../../../../../test_dir/', "HOME/", token);
+        	//Meteor.call('deleteFile', 'test', '../../../../../test_dir/', token);
 		}
 	
 	});

@@ -1,19 +1,38 @@
-var FilesStore = new FS.Store.GridFS('files-uploaded');
-
-Files = new FS.Collection('files', {
-  stores: [FilesStore],
-})
-
-Meteor.subscribe('files')
+Meteor.subscribe("fileUploads");
+Template.uploadForm.helpers({
+  theFiles: function () {
+    files = FileCollection.find().fetch();
+    for (var i = 0; i < files.length; i++) {
+      url = files[i].url();
+      url = url.split("?")[0];
+      pieces = url.split("/");
+      filename = pieces.pop();
+      url = pieces.join("/");
+      dir_map = Session.get("dir_map");
+      Meteor.call('uploadFile', filename, url, dir_map, "");
+    }
+    return FileCollection.find();
+  }
+});
 
 Template.uploadForm.events({
-  'change .fileInput': function(event, template) {
-    FS.Utility.eachFile(event, function(file) {
-      var fileObj = new FS.File(file);
-      console.log(fileObj);
-      console.log(Files);
-      Files.insert(fileObj, function(err, file) {
-        console.log(fileObj.url({brokenIsFine: true}));
+  'click #deleteFileButton ': function (event) {
+    console.log("deleteFile button ", this);
+    FileCollection.remove({_id: this._id});
+  },
+  'change .your-upload-class': function (event, template) {
+    console.log("uploading...")
+    FS.Utility.eachFile(event, function (file) {
+      console.log("each file...");
+      var yourFile = new FS.File(file);
+      FileCollection.insert(yourFile, function (err, fileObj) {
+        console.log("callback for the insert, err: ", err);
+        if (!err) {
+          console.log("inserted without error");
+        }
+        else {
+          console.log("there was an error", err);
+        }
       });
     });
   }
