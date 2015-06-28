@@ -4,10 +4,10 @@
     {{> header}}
   </div>
   <div>
-    <div>
+    <div class=".col-md-8">
       {{> left}}
     </div>
-    <div>
+    <div id="right" class=".col-md-4">
       {{> right}}
     </div>
   </div>
@@ -21,8 +21,17 @@
 
 <template name='left'>
   {{> searchBar }}
-  {{ > directoryMap }}
-  {{ > fileList}}
+  {{> directoryMap }}
+  {{> fileList}}
+</template>
+
+<template name='searchBar'>
+</template>
+
+<template name='directoryMap'>
+</template>
+
+<template name='fileList'>
 </template>
 
 <template name='footer'>
