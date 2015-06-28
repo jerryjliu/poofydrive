@@ -12,6 +12,16 @@ Meteor.startup(function() {
 
 });
  
+Meteor.methods({
+  getGoogleAccessToken : function() {
+    try {
+      return Meteor.user().services.google.accessToken;
+    } catch(e) {
+      return null;
+    }
+  }
+}); 
+
 Accounts.onCreateUser(function (options, user) {
     if (user.services) {
         if (options.profile) {
