@@ -40,51 +40,52 @@ if (Meteor.isServer) {
 		// should have uploaded files
 		uploadFile: function(filename, dir) {
 			//get information about all providers
-			var providersArray = StorageProviders.find().fetch();
+			var user = Users.find({user_id: this.userId}).fetch();
+			var providersArray = user[kUsersSP];
 			var capacityArray = [];
 			for (var i in providersArray) {
 				var provider = providersArray[i];
-				var capacity = provider[kStorageProvidersCapacity];
+				var capacity = provider[kUsersSPCapacity];
 				capacityArray.push(capacity);
 			}
 
 			outputChunks = processFile(filename, dir, capacityArray);
 
-			//insert file entry to FSEntries, get insert id
+			//build file entry to Files
 			fsinsert = {};
-			fsinsert[kFSEntriesParent] = dir;
-			fsinsert[kFSEntriesName] = filename;
-			fsinsert[kFSEntriesType] = 0;
-
-			fid = FSEntries.insert(fsinsert);
+			fsinsert[kFilesUserID] = user[kUsersID];
+			fsinsert[kFilesParent] = dir;
+			fsinsert[kFilesName] = filename;
+			fsinsert[kFilesIsDir] = 0;
+			fsinsert[kFilesChunks] = [];
 
 			//upload these chunks to the storage providers - identified using providersArray
 			//also insert entries into FSChunkEntries
 			for (var i in providersArray) {
 				var provider = providersArray[i];
-				var providerId = provider[kStorageProvidersID];
+				var providerId = provider[kUsersSPName];
 				var chunk = outputChunks[i];
 				//dropbox
-				if (providerId == 0) {
+				if (providerId == StorageProvider_Dropbox) {
 					//upload chunk to dropbox
 				}
 				//google
-				else if (providerId == 1) {
+				else if (providerId == StorageProvider_Google) {
 					//upload chunk to google
 				}
 
 				//insert into FSChunkEntries
 				fschunkinsert = {};
-				fschunkinsert[kFSChunkEntriesFID] = fid;
-				fschunkinsert[kFSChunkEntriesPID] = providerId;
-				fschunkinsert[kFSChunkEntriesSeqnum] = i;
-				FSChunkEntries.insert(fschunkinsert);
+				fschunkinsert[kFilesChunksStorageProvider] = providerId;
+				fschunkinsert[kFilesChunksSeqnum] = i;
+				fsinsert[kFilesChunks].append(fschunkinsert);
 			}
+			FSEntries.insert(fsinsert);
 		},
 
 		downloadFile: function(filename, dir) {
 			// get information about file in database (where is it stored?)
-			
+
 		}
 	});
 }

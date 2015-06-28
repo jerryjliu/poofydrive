@@ -9,6 +9,13 @@ autopublish
 insecure
 percolate:google-api
 iron:router
+<<<<<<< HEAD
+http
+google
+accounts-google
+accounts-ui
+service-configuration
+=======
 cfs:standard-packages
 cfs:gridfs
 cfs:filesystem
@@ -17,3 +24,4 @@ npm-container
 fortawesome:fontawesome
 less
 nemo64:bootstrap
+>>>>>>> origin/master
