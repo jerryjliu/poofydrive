@@ -2,14 +2,19 @@ Meteor.subscribe("fileUploads");
 Template.uploadForm.helpers({
   theFiles: function () {
     files = FileCollection.find().fetch();
+    console.log(files);
     for (var i = 0; i < files.length; i++) {
       url = files[i].url();
+      if (!url) {
+        continue
+      }
       url = url.split("?")[0];
       pieces = url.split("/");
       filename = pieces.pop();
-      url = pieces.join("/");
+      url = pieces.join("/") + "/";
       dir_map = Session.get("dir_map");
-      Meteor.call('uploadFile', filename, url, dir_map, "");
+      fileId = files[i]._id;
+      Meteor.call('uploadFile', filename, url, dir_map, fileId, "");
     }
     return FileCollection.find();
   }

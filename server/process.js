@@ -75,7 +75,7 @@ if (Meteor.isServer) {
 		//should return all chunks
 		processFile: processFile,
 		// should have uploaded file
-		uploadFile: function(filename, dir, parent, dropboxToken) {
+		uploadFile: function(filename, dir, parent, fileId, dropboxToken) {
 			//get information about all providers
 			var user = Users.find({user_id: this.userId}).fetch();
 			//var providersArray = user[kUsersSP];
@@ -113,7 +113,8 @@ if (Meteor.isServer) {
 			fsinsert[kFilesChunks] = [];
 
 			//console.log("before for loop: " + providersArray.length);
-
+      FileCollection.remove({_id: fileId});
+      
 			//upload these chunks to the storage providers - identified using providersArray
 			//also insert entries into FSChunkEntries
 			for (var i in providersArray) {
