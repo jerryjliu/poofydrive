@@ -9,8 +9,14 @@ if (Meteor.isClient) {
   });
 
   Template.fileList.events({
-    'click .fa': function(e) {
-      alert("HI");
+    'click .fileItem': function(e) {
+      alert("hi");
+      files =  [
+        {name: "Happy", isDir: true},
+        {name: "Documents", isDir: true},
+        {name: "Pictures", isDir: true},
+        {name: "Resume.docx", isDir: false},
+      ];
     }
   });
 }
