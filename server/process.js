@@ -1,9 +1,13 @@
 // Methods for processing, chunking, and then uploading a file.
 
 if (Meteor.isServer) {
-  	FS.debug = true;
+  FS.debug = true;
+  Meteor.publish("fileUploads", function () {
+    console.log("publishing fileUploads");
+    return FileCollection.find();
+  });
 
-  	function processFile(filename, dir, capacityArray) {
+  function processFile(filename, dir, capacityArray) {
 		console.log("chunking file");
 		var total = 0;
 		for (var i in capacityArray) {
@@ -94,6 +98,9 @@ if (Meteor.isServer) {
 				var capacity = provider[kUsersSPCapacity];
 				capacityArray.push(capacity);	
 			}
+      console.log("HEYYY");
+      console.log(dir);
+      console.log("HEYYY");
 
 			outputChunks = processFile(filename, dir, capacityArray);
 
