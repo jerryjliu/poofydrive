@@ -174,6 +174,28 @@ if (Meteor.isServer) {
 			{
 				$set: {files: file_ids}
 			});
+		},
+		
+		'authFile': function(code) {
+			console.log(code);
+			console.log("server code");
+			console.log("inner");
+
+			// user enters login information, change redirect URI
+			// get authorization token
+			var access = HTTP.call("POST", "https://api.dropbox.com/1/oauth2/token", {params: {code: code, grant_type: "authorization_code", redirect_uri: "http://localhost:3000/dropboxauth", client_id: "muq1fnhg0cfrx3v", client_secret: "z4ukcmrqsvub78i"}});
+		
+			//var obj = JSON.parse(access);
+			var content_obj = JSON.parse(access['content']);
+        	token = content_obj['access_token'];
+        	
+        	console.log(token);
+
+        	// tests returning account info
+        	var account_info = HTTP.call("GET", "https://api.dropbox.com/1/account/info", {headers: {Authorization: 'Bearer ' + token}});		
+			
+        	console.log(account_info);
 		}
+	
 	});
 }
