@@ -10,11 +10,11 @@
 
 <template name="fileItem">
   <div class="fileItem">
-    {{#if isDir}}
+    {{#if kFilesIsDir}}
       <i class="fa fa-folder-o"></i>
     {{else }}
       <i class="fa fa-file-o"></i>
     {{/if}}
-    <span>{{name}}</span>
+    <span>{{kFilesName}}</span>
   </div>
 </template>
