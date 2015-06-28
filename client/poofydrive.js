@@ -34,16 +34,21 @@ if (Meteor.isClient) {
         window.open("https://www.dropbox.com/1/oauth2/authorize?client_id=muq1fnhg0cfrx3v&response_type=code&redirect_uri=http://localhost:3000/dropboxauth", "_self");
 
         // Need to change to make this wait
+        /*console.log("pre google call");
         Meteor.loginWithGoogle({
-            requestPermissions: [],
+            requestPermissions: ['email', 'https://www.googleapis.com/auth/drive'],
+            requestOfflineToken: true,
             loginStyle: "popup"
           }, function(err) {
             if(err) {
               console.log('Error: ', err);
             } else {
-              Router.go('home');
+              Router.go('/loggedIn');
             }
         })
+        console.log("pre call");
+        token = "dd";
+        Meteor.call('uploadFile', 'test', '../../../../../test_dir/', "HOME/", token);*/
      }
    });
 }
