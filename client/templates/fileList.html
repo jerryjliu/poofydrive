@@ -1,0 +1,20 @@
+<template name="fileList">
+  <div class="row">
+    {{#each files }}
+    <div class="col-lg-4">
+      {{>fileItem}}
+    </div>
+    {{/each}}
+  </div>
+</template>
+
+<template name="fileItem">
+  <div class="fileItem">
+    {{#if isDir}}
+      <i class="fa fa-folder-o"></i>
+    {{else }}
+      <i class="fa fa-file-o"></i>
+    {{/if}}
+    <span>{{name}}</span>
+  </div>
+</template>
