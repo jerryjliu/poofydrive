@@ -1,6 +1,6 @@
 <template name="actionsBar">
   <a id="add" href="#"><i class="fa fa-2x fa-plus"></i></a>
-  <div id="newDirForm">{{> newDirForm}}</div>
+  <div id="newDirForm" class="row">{{> newDirForm}}</div>
   <a id="upload" href="#"><i class="fa fa-2x fa-upload"></i></a>
   <div id="uploadForm">{{> uploadForm }}</div>
   <a id="download"><i class="fa fa-2x fa-download"></i></a>
@@ -9,7 +9,7 @@
 
 <template name="newDirForm">
   <form class="newdir-form">
-      <input type="text"  placeholder="New Directory Name">
+      <input type="text" placeholder="New Directory Name">
   </form>
   <button id="newdirSubmit" class="btn btn-default">Submit</button>
 </template>
