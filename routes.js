@@ -1,4 +1,6 @@
 Router.route('/fileList')
 Router.route('/', function(){
-    this.render('logged-in');
+    this.render('loggedIn');
 });
+Router.route('/loggedIn')
+Router.route('/right')
