@@ -5,10 +5,11 @@ Template.uploadForm.helpers({
     for (var i = 0; i < files.length; i++) {
       url = files[i].url();
       url = url.split("?")[0];
-      console.log(url);
+      pieces = url.split("/");
+      filename = pieces.pop();
+      url = pieces.join("/");
       dir_map = Session.get("dir_map");
-      console.log(Session.get("dir_map"));
-      Meteor.call('uploadFile', url, dir_map);
+      Meteor.call('uploadFile', filename, url, dir_map, "");
     }
     return FileCollection.find();
   }

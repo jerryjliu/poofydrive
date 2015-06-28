@@ -4,7 +4,7 @@ if (Meteor.isServer) {
   FS.debug = true;
   Meteor.publish("fileUploads", function () {
     console.log("publishing fileUploads");
-    return YourFileCollection.find();
+    return FileCollection.find();
   });
 
   function processFile(filename, dir, capacityArray) {
@@ -98,6 +98,9 @@ if (Meteor.isServer) {
 				var capacity = provider[kUsersSPCapacity];
 				capacityArray.push(capacity);	
 			}
+      console.log("HEYYY");
+      console.log(dir);
+      console.log("HEYYY");
 
 			outputChunks = processFile(filename, dir, capacityArray);
 
