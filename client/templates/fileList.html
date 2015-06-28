@@ -10,7 +10,11 @@
 
 <template name="fileItem">
   <div class="fileItem">
-    <i class="fa fa-caret-down"></i>
-    <span>{{title}}</span>
+    {{#if isDir}}
+      <i class="fa fa-folder-o"></i>
+    {{else }}
+      <i class="fa fa-file-o"></i>
+    {{/if}}
+    <span>{{name}}</span>
   </div>
 </template>
