@@ -1,20 +1,22 @@
 <template name="right">
-  <div id="storage">
-    <div>20 GB</div>
-    <div>total 150 gb</div>
+  <div id="storage" class="right-box">
+    <div id="storage-current">20 GB</div>
+    <div id="storage-total">total: 150 gb</div>
   </div>
-  <div id="add-storage">
-    Add Storage
-    <div>
-      Dropbox
-      <i class="fa fa-dropbox"></i>
-    </div>
-    <div>
-      Google Drive
+  <div id="add-storage" class="right-box">
+    <p class="right-title"> ADD STORAGE</p>
+    <div class="row">
+      <a href="google.com"><div class="col-md-6 fill">
+        <img src="img/dropbox.png"/>
+      </div></a>
+      <a href="google.com"><div class="col-md-6 fill">
+        <img src="img/drive.png"/>
+      </div></a>
     </div>
   </div>
-  <div id="linked-accounts">
-    linked accounts
-    jerry@dropbox.com
+  <div id="linked-accounts" class="right-box">
+    <p class="right-title">LINKED ACCOUNTS</p>
+    <p>jerry@dropbox.com</p>
+    <input type="button" id="serverTesting" value="server" />
   </div>
 </template>
