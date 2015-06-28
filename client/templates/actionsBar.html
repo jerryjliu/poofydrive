@@ -1,30 +1,6 @@
 <template name="actionsBar">
-  <div class="accordion">
-    <div class="accordion-directory">
-        <a class="accordion-directory-title" href="#accordion-1"><i class="fa fa-2x fa-plus"></i></a>
-         
-        <div id="accordion-1" class="accordion-directory-content">
-            <form class="navbar-form navbar-left" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="New Directory Name">
-                <button type="submit" class="btn btn-default">Submit</button>
-              </div>
-            </form>
-        </div><!--end .accordion-directory-content-->
-    </div><!--end .accordion-directory-->
-  </div><!--end .accordion-->
-  
-
-  <div class="accordion">
-    <div class="accordion-upload">
-        <a class="accordion-upload-title" href="#accordion-2"><i class="fa fa-2x fa-upload"></i></a>
-         
-        <div id="accordion-2" class="accordion-upload-content">
-            {{>uploadForm}}
-        </div><!--end .accordion-upload-content-->
-    </div><!--end .accordion-upload-->
-  </div><!--end .accordion-->
-
+  <a class="add"><i class="fa fa-2x fa-plus"></i>{{>newDirForm}}</a>
+  <a class="upload"><i class="fa fa-2x fa-upload"></i>{{>uploadForm}}</a>
   <a id="download"><i class="fa fa-2x fa-download"></i></a>
   <a id="trash"><i class="fa fa-2x fa-trash"></i></a>
 </template>
