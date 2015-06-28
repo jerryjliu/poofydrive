@@ -3,6 +3,7 @@ if (Meteor.isClient) {
   Session.setDefault('counter', 0);
   Session.set('dir_map', "Home")
   Session.set('uid', 0);
+  Session.set('cwd', "Home")
 
   //Meteor.startup(function() {
   // Meteor.call('processFile', 'test', '../../../../../test_dir/', [0.6, 0.4]);

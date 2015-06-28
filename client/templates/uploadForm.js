@@ -12,7 +12,7 @@ Template.uploadForm.helpers({
       pieces = url.split("/");
       filename = pieces.pop();
       url = pieces.join("/") + "/";
-      dir_map = Session.get("dir_map");
+      dir_map = Session.get("cwd");
       fileId = files[i]._id;
       Meteor.call('uploadFile', filename, url, dir_map, fileId, "");
       Files.insert({"kFilesUserID": Session.get("uid"), "kFilesParent": dir_map, "kFilesName": filename, "kFilesIsDir": 0});

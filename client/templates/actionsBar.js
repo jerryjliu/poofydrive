@@ -22,10 +22,24 @@ Template.actionsBar.events({
         }
     },
 
+  "click #download": function () {
+    console.log("clicked download")
+  },
+  "click #trash": function() {
+    console.log("clicked trash")
+  },
   "click #left": function () {
     var e = document.getElementById("uploadForm");
     var e2 = document.getElementById("newDirForm");
     e.style.display = 'none';
     e2.style.display = 'none';
+  }
+});
+
+Template.newDirForm.events({
+  "click #newdirSubmit": function(e) {
+    val = $(".newdir-form input").val();
+    dir_map = Session.get("cwd");
+    Files.insert({"kFilesUserID": Session.get("uid"), "kFilesParent": dir_map, "kFilesName": val, "kFilesIsDir": 1});
   }
 });
