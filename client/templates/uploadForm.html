@@ -1,10 +1,10 @@
 <template name="uploadForm">
-  <div id="uploadForm" class="row">
-    <form class="row">
-      <input class="your-upload-class" type="file">
+  <div class="row">
+    <form>
+      <input class="your-upload-class col-md-9x" type="file">
       {{#each theFiles}}
       {{/each}}
-      <input type="submit">
+      <input type="submit" class="col-md-3x">
     </form>
   </div>
 </template>
