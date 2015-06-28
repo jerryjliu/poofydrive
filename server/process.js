@@ -117,13 +117,14 @@ if (Meteor.isServer) {
 				console.log("outside if loop");
 				//dropbox
 				if (providerId == StorageProvider_Dropbox) {
-					var url_string = "https://api-content.dropbox.com/1/files_put/auto/" + path + "?"; 
+					var url_string = "https://api-content.dropbox.com/1/files_put/auto/" + path + "?overwrite=true"; 
 					var fs = Npm.require("fs");
 					var chunkContents = fs.readFileSync(chunk);
-					var newChunk = chunkContents.toString('utf8');
-					console.log("pre chunk");
-					// set value of token
-					var account_info = HTTP.call("PUT", url_string, {data: [newChunk]}, {headers: {'Authorization': 'Bearer ' + dropboxToken, 'Content-Type': 'text/html'}});		
+					//var newChunk = chunkContents.toString('utf8');
+					var newChunk = chunkContents.toString("binary");
+					console.log("pre chunk: ", dropboxToken);
+					// set value of access_tokenn
+					var account_info = HTTP.call("PUT", url_string, {data: [newChunk], headers: {'Authorization': 'Bearer ' + dropboxToken}});		
 					console.log("successful?");
 					console.log(account_info);
 
