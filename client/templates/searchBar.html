@@ -1,12 +1,9 @@
 <template name="searchBar">
-  <p>
-    Hi {{ name }} !
-  </p>
   <form class="navbar-form navbar-left" role="search">
     <div class="form-group">
       <input type="text" class="form-control" placeholder="Search">
+      <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
   </form>
   {{ > uploadForm }}
   <i class="fa fa-upload"></i>
