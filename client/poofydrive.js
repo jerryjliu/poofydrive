@@ -3,10 +3,10 @@ if (Meteor.isClient) {
   Session.setDefault('counter', 0);
   Session.set('dir_map', "Home")
 
-  Meteor.startup(function() {
-     Meteor.call('processFile', 'test', '../../../../../test_dir/', [0.6, 0.4]);
-     Meteor.call('unprocessFile', 'test', '../../../../../test_dir/', 2);
-  });
+  //Meteor.startup(function() {
+  // Meteor.call('processFile', 'test', '../../../../../test_dir/', [0.6, 0.4]);
+  //   Meteor.call('unprocessFile', 'test', '../../../../../test_dir/', 2);
+  //});
 
   // Template.hello.helpers({
   //   counter: function () {
@@ -21,20 +21,27 @@ if (Meteor.isClient) {
   //     Session.set('counter', Session.get('counter') + 1);
 
 
-  //     // Allows us to access Google Drive by getting permission
-  //       Meteor.loginWithGoogle({
-  //         requestPermissions: [],
-  //         loginStyle: "popup"
-  //       }, function(err) {
-  //         if(err) {
-  //           console.log('Error: ', err);
-  //         } else {
-  //           Router.go('home');
-  //         }
-  //       })
+  Template.right.events({
+    'click #serverTesting': function (event) {
+      // increment the counter when button is clicked
+      Session.set('counter', Session.get('counter') + 1);
+      
 
+      // Allows us to access Google Drive by getting permission
+        
+        window.open("https://www.dropbox.com/1/oauth2/authorize?client_id=muq1fnhg0cfrx3v&response_type=code&redirect_uri=http://localhost:3000/dropboxauth", "_self");
 
-
-  //   }
-  // });
+        // Need to change to make this wait
+        Meteor.loginWithGoogle({
+            requestPermissions: [],
+            loginStyle: "popup"
+          }, function(err) {
+            if(err) {
+              console.log('Error: ', err);
+            } else {
+              Router.go('home');
+            }
+        })
+     }
+   });
 }
