@@ -4,7 +4,7 @@ if (Meteor.isServer) {
 	Meteor.methods({
 
 		//should return all chunks
-		processFile: function(filename, capacityArray) {
+		processFile: function(filename, dir, capacityArray) {
 			var total = 0;
 			for (var i in capacityArray) {
 				total += capacityArray[i];
@@ -14,7 +14,7 @@ if (Meteor.isServer) {
 			}
 
 			var fs = Npm.require("fs");
-			var fileContents = fs.readFileSync(filename);
+			var fileContents = fs.readFileSync(dir + filename);
 
 			if (fileContents.length == 0) {
 				return null;
@@ -23,13 +23,13 @@ if (Meteor.isServer) {
 			var a = 0;
 			var curFraction = 0;
 			var returnArray = [];
-			var outputFile = filename + "_part_0";
+			var outputFile = dir + filename + "_part_0";
 			returnArray.append(outputFile);
 			for(var i = 0; i < fileContents.length; i++) {
 				var fraction = i / fileContents.length;
 				if (fraction > curFraction) {
 					a++;
-					var outputFile = filename + "_part_" + a;
+					var outputFile = dir + filename + "_part_" + a;
 					curFraction += capacityArray[a];
 					returnArray.append(outputFile);
 				}
@@ -37,7 +37,8 @@ if (Meteor.isServer) {
 			}
 			return returnArray;
 		},
-		uploadFile: function(filename) {
+		// should have uploaded files
+		uploadFile: function(filename, dir) {
 			//get information about all providers
 			var providersArray = StorageProviders.find().fetch();
 			var capacityArray = [];
@@ -47,9 +48,15 @@ if (Meteor.isServer) {
 				capacityArray.push(capacity);
 			}
 
-			outputChunks = processFile(filename, capacityArray);
+			outputChunks = processFile(filename, dir, capacityArray);
 
-			//insert file entry to FSEntries, get file
+			//insert file entry to FSEntries, get insert id
+			fsinsert = {};
+			fsinsert[kFSEntriesParent] = dir;
+			fsinsert[kFSEntriesName] = filename;
+			fsinsert[kFSEntriesType] = 0;
+
+			fid = FSEntries.insert(fsinsert);
 
 			//upload these chunks to the storage providers - identified using providersArray
 			//also insert entries into FSChunkEntries
@@ -65,14 +72,19 @@ if (Meteor.isServer) {
 				else if (providerId == 1) {
 					//upload chunk to google
 				}
+
+				//insert into FSChunkEntries
+				fschunkinsert = {};
+				fschunkinsert[kFSChunkEntriesFID] = fid;
+				fschunkinsert[kFSChunkEntriesPID] = providerId;
+				fschunkinsert[kFSChunkEntriesSeqnum] = i;
+				FSChunkEntries.insert(fschunkinsert);
 			}
-
-
-
 		},
 
-		downloadFile: function(filename) {
+		downloadFile: function(filename, dir) {
 			// get information about file in database (where is it stored?)
+			
 		}
 	});
 }
