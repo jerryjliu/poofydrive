@@ -1,7 +1,6 @@
 <template name='loggedIn'>
   <div class="container-fluid">
-    <h1>PoofyDrive</h1>
-    <div>
+    <div class="row" id="header">
       {{> header}}
     </div>
     <div class="row">
@@ -19,6 +18,13 @@
 </template>
 
 <template name='header'>
+  <div class="col-md-3">
+    <p id="logo">PoofyDrive</p>
+    <i class="fa fa-4x fa-lg fa-inverse fa-cloud"></i>
+  </div>
+  <div>
+    <p id="title">Hi {{ name }}!</p>
+  </div>
 </template>
 
 <template name='footer'>
