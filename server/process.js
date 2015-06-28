@@ -1,6 +1,8 @@
 // Methods for processing, chunking, and then uploading a file.
 
 if (Meteor.isServer) {
+  FS.debug = true;
+
 	Meteor.methods({
 
 		//should return all chunks
