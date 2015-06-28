@@ -1,17 +1,20 @@
 Meteor.subscribe("fileUploads");
-Template.fileList.helpers({
+Template.uploadForm.helpers({
   theFiles: function () {
-    console.log("HI");
     files = FileCollection.find().fetch();
     for (var i = 0; i < files.length; i++) {
-      console.log(files[i].url());
+      url = files[i].url();
+      url = url.split("?")[0];
+      console.log(url);
+      dir_map = Session.get("dir_map");
+      console.log(Session.get("dir_map"));
+      Meteor.call('uploadFile', url, dir_map);
     }
-    console.log("HI");
     return FileCollection.find();
   }
 });
 
-Template.fileList.events({
+Template.uploadForm.events({
   'click #deleteFileButton ': function (event) {
     console.log("deleteFile button ", this);
     FileCollection.remove({_id: this._id});
@@ -33,16 +36,3 @@ Template.fileList.events({
     });
   }
 });
-
-
-// Template.uploadForm.events({
-//   'change .fileInput': function(event, template) {
-//     FS.Utility.eachFile(event, function(file) {
-//       var fileObj = new FS.File(file);
-//       console.log(fileObj.url());
-//       var file = Files.insert(fileObj);
-//       var fileId = file._id;
-//     });
-//   }
-// });
-
